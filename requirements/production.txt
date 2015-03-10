@@ -1,6 +1,0 @@
--r base.txt
-gunicorn==19.1.1
-whitenoise==1.0.6
-dj-static==0.0.6
-static==0.4
-psycopg2==2.5.1
