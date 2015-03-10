@@ -1,0 +1,69 @@
+[
+    {
+        "fields": {
+            "department": "Development",
+            "spots": 20
+        },
+        "model": "testtask.roomsdynamicmodel",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "department": "Management",
+            "spots": 5
+        },
+        "model": "testtask.roomsdynamicmodel",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "department": "Security",
+            "spots": 2
+        },
+        "model": "testtask.roomsdynamicmodel",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "paycheck": 2400,
+            "name": "Nikolay",
+            "date_joined": "2015-03-10"
+        },
+        "model": "testtask.usersdynamicmodel",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "paycheck": 2100,
+            "name": "Yruy",
+            "date_joined": "2015-03-01"
+        },
+        "model": "testtask.usersdynamicmodel",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "paycheck": 3100,
+            "name": "Anton",
+            "date_joined": "2015-01-12"
+        },
+        "model": "testtask.usersdynamicmodel",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "description": "Like reads a book",
+            "title": "Read"
+        },
+        "model": "testtask.hobbiesdynamicmodel",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "description": "Like watch older films",
+            "title": "Films"
+        },
+        "model": "testtask.hobbiesdynamicmodel",
+        "pk": 2
+    }
+]

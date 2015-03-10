@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+<html>
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="{% static 'js/testtask.js' %}"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="row row-offcanvas row-offcanvas-right">
+      <div class="col-xs-6 col-sm-3 sidebar-offcanvas" id="sidebar">
+        <div class="list-group">
+          {% for model in models %}
+            <a href="{{ model.id }}" class="list-group-item">{{ model.title }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="tables" class="col-xs-12 col-sm-9">
+        {% for model in models %}
+          <div id="{{ model.id }}-table" style="display: none;"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

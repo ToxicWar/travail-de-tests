@@ -1,0 +1,1 @@
+web: gunicorn site_testtask.wsgi --preload --max-requests 200
