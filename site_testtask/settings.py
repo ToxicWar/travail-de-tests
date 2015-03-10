@@ -85,3 +85,25 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MODELS_FILE = os.path.join(BASE_DIR, 'testtask', 'models.yaml')
+
+# Parse database configuration from $DATABASE_URL
+try:
+    import psycopg2
+    import dj_database_url
+    DATABASES['default'] = dj_database_url.config(default='postgres://site_testtask:@localhost/site_testtask')
+except ImportError as e:
+    pass
+
+# Honor the 'X-Forwarded-Proto' header for request.is_secure()
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Allow all host headers
+ALLOWED_HOSTS = ['*']
+
+STATIC_ROOT = 'staticfiles'
+
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, 'static'),
+# )
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
