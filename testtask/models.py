@@ -47,6 +47,9 @@ class DynamicModel(object):
         """
         Create a dynamic model from dict data.
         """
+        if not model:
+            return None
+
         attrs = self.get_dynamic_model_fields(model)
         # byte string looks sad
         attrs.update(Meta=type(b'Meta', (), self.get_meta_fields(model)))
@@ -59,7 +62,7 @@ class DynamicModel(object):
         return module_name in self.__class__.registry
 
     def get_dynamic_model(self, module_name):
-        return self.__class__.registry.get(module_name)
+        return self.__class__.registry.get(module_name, None)
 
     def get_dynamic_model_fields(self, model=None):
         fields = {
@@ -70,11 +73,11 @@ class DynamicModel(object):
         fields.update(model['fields'])
         return fields
 
-    def get_meta_fields(self, model):
+    def get_meta_fields(self, model=None):
         return {
             'ordering': ('-id',),
-            'verbose_name': unicode(model['verbose_name']),
-            'verbose_name_plural': unicode(model['verbose_name']),
+            'verbose_name': unicode(model['verbose_name'] if model else 'Name'),
+            'verbose_name_plural': unicode(model['verbose_name'] if model else 'Names'),
         }
 
 

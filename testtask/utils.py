@@ -24,7 +24,7 @@ def get_field_by_type(_type, **kwargs):
 
 
 def get_models_from_file(config_file=settings.MODELS_FILE):
-    models = yaml.load(open(config_file, 'r'))
+    models = yaml.load(open(config_file, 'r')) if config_file else {}
 
     for name, params in models.iteritems():
         fields = {}
