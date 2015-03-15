@@ -2,8 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.test import TestCase
-from testtask.models import DynamicModel, DynamicModelDescriptor
-from testtask.utils import get_models_from_file
+from testtask.models import DynamicModel
 
 
 class ModelTests(TestCase):

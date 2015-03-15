@@ -2,7 +2,8 @@ function initial(){
     $('.list-group-item').each(function(index, item){
         $.ajax({
             url: $(item).attr('href'),
-            dataType: 'json'
+            dataType: 'json',
+            async: false
         }).done(function(data){
             create_table($(item).attr('href'), data.fields, data.qs);
         });
@@ -26,7 +27,7 @@ function create_table(model, fields, data){
     $.each(data, function(index, value){
         content += '<tr>';
         $.each(value, function(i, item){
-            content += '<td>'+item+'</td>'
+            content += '<td class="field-data" data-id="'+value[value.length-1]+'" data-field="'+fields[i]+'">'+item+'</td>'
         });
         content += '</tr>';
     });
@@ -34,6 +35,44 @@ function create_table(model, fields, data){
 
     content += '</table>';
     $container.append(content);
+}
+
+function post_update_field(){
+    var $input = $(this).find('input');
+    $.ajax({
+        type: "POST",
+        url: $('.list-group-item.active').attr('href')+'/',
+        data: {
+            field: $input.data('field'),
+            id: $input.data('id'),
+            data: $input.val()
+        },
+        dataType: 'json',
+        async: false
+    }).done(function(data){
+        if (data['status'] == 'ok'){
+            $input.parent().html($input.val());
+            $('#update-field').off('submit', post_update_field);
+            $('.field-data').on('click', update_field);
+        } else {
+            alert(data['message']);
+        }
+    }).fail(function(error){
+        alert("Что-то пошло не так");
+    });
+    return false;
+}
+
+function update_field(){
+    $('.field-data').off('click', update_field);
+    var $item = $(this);
+    var html = '<form id="update-field">'+
+        '<input data-id="'+$item.data('id')+'" data-field="'+$item.data('field')+'" type="text"/>'+
+        '<button type="submit" class="btn btn-default">Изменить</button>'+
+        '</form>';
+    $item.html(html);
+    $('#update-field').on('submit', post_update_field);
+    return false;
 }
 
 function change_tab(){
@@ -49,4 +88,5 @@ $(function() {
     initial();
 
     $('.list-group-item').on('click', change_tab);
+    $('.field-data').on('click', update_field);
 });
