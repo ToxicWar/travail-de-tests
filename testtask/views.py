@@ -1,12 +1,15 @@
 # coding: utf-8
 from __future__ import unicode_literals
 from django.db.models.loading import get_model
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.views.generic import View, TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers.json import DjangoJSONEncoder
 from .models import DynamicModel
+import logging
 import json
+
+logger = logging.getLogger(__name__)
 
 
 class TestTaskView(TemplateView):
@@ -24,7 +27,12 @@ testtask = TestTaskView.as_view()
 
 class ModelDataView(View):
     def get(self, request, model_name):
-        Model = get_model('testtask', model_name)
+        try:
+            Model = get_model('testtask', model_name)
+        except LookupError as e:
+            logger.exception(e)
+            return HttpResponseBadRequest(json.dumps({'error': e.message}))
+
         fields = [f.name for f in Model._meta.fields]
         qs = Model.objects.all().values_list(*fields)
         result = {'fields': fields, 'qs': list(qs)}
@@ -32,7 +40,12 @@ class ModelDataView(View):
                             content_type='application/json')
 
     def post(self, request, model_name):
-        Model = get_model('testtask', model_name)
+        try:
+            Model = get_model('testtask', model_name)
+        except LookupError as e:
+            logger.exception(e)
+            return HttpResponseBadRequest(json.dumps({'error': e.message}))
+
         field = request.POST.get('field', None)
         _id = request.POST.get('id', None)
         value = request.POST.get('data', None)
