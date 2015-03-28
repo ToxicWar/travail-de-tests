@@ -36,12 +36,8 @@ class ViewsTests(TestCase):
         self.assertEqual(data['error'], "App 'testtask' doesn't have a 'somemodel' model.")
 
     def test_update_model_data_200(self):
-        data = {
-            'field': 'title',
-            'id': '1',
-            'data': 'Test'
-        }
-        response = self.client.post(reverse_lazy('ModelData', kwargs={'model_name': 'HobbiesDynamicModel'}), data=data)
+        data = 'field={}&id={}&data={}'.format('title', 1, 'Test')
+        response = self.client.put(reverse_lazy('ModelData', kwargs={'model_name': 'HobbiesDynamicModel'}), data=data)
         status = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -49,12 +45,8 @@ class ViewsTests(TestCase):
         self.assertEqual(status['status'], 'ok')
 
     def test_update_model_data_200_error(self):
-        data = {
-            'field': 'date_joined',
-            'id': '1',
-            'data': 'dummy'
-        }
-        response = self.client.post(reverse_lazy('ModelData', kwargs={'model_name': 'UsersDynamicModel'}), data=data)
+        data = 'field={}&id={}&data={}'.format('date_joined', 1, 'dummy')
+        response = self.client.put(reverse_lazy('ModelData', kwargs={'model_name': 'UsersDynamicModel'}), data=data)
         status = json.loads(response.content)
 
         self.assertEqual(response.status_code, 200)
@@ -63,12 +55,8 @@ class ViewsTests(TestCase):
         self.assertTrue('message' in status)
 
     def test_update_model_data_400(self):
-        data = {
-            'field': 'title',
-            'id': '1',
-            'data': 'Test'
-        }
-        response = self.client.post(reverse_lazy('ModelData', kwargs={'model_name': 'SomeModel'}), data=data)
+        data = 'field={}&id={}&data={}'.format('title', 1, 'Test')
+        response = self.client.put(reverse_lazy('ModelData', kwargs={'model_name': 'SomeModel'}), data=data)
         status = json.loads(response.content)
 
         self.assertEqual(response.status_code, 400)
