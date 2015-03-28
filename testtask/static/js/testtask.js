@@ -1,7 +1,7 @@
 function initial(){
     $('.list-group-item').each(function(index, item){
         $.ajax({
-            url: $(item).attr('href'),
+            url: $(item).attr('href')+'/',
             dataType: 'json',
             async: false
         }).done(function(data){
@@ -37,10 +37,10 @@ function create_table(model, fields, data){
     $container.append(content);
 }
 
-function post_update_field(){
+function put_update_field(){
     var $input = $(this).find('input');
     $.ajax({
-        type: "POST",
+        type: "PUT",
         url: $('.list-group-item.active').attr('href')+'/',
         data: {
             field: $input.data('field'),
@@ -51,8 +51,8 @@ function post_update_field(){
         async: false
     }).done(function(data){
         if (data['status'] == 'ok'){
-            $input.parent().html($input.val());
-            $('#update-field').off('submit', post_update_field);
+            $input.parent().parent().text($input.val());
+            $('#update-field').off('submit', put_update_field);
             $('.field-data').on('click', update_field);
         } else {
             alert(data['message']);
@@ -71,7 +71,7 @@ function update_field(){
         '<button type="submit" class="btn btn-default">Изменить</button>'+
         '</form>';
     $item.html(html);
-    $('#update-field').on('submit', post_update_field);
+    $('#update-field').on('submit', put_update_field);
     return false;
 }
 
