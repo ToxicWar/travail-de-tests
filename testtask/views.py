@@ -1,7 +1,7 @@
 # coding: utf-8
 from __future__ import unicode_literals
 from django.db.models.loading import get_model
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, QueryDict
 from django.views.generic import View, TemplateView
 from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers.json import DjangoJSONEncoder
@@ -39,16 +39,17 @@ class ModelDataView(View):
         return HttpResponse(json.dumps(result, cls=DjangoJSONEncoder),
                             content_type='application/json')
 
-    def post(self, request, model_name):
+    def put(self, request, model_name):
         try:
             Model = get_model('testtask', model_name)
         except LookupError as e:
             logger.exception(e)
             return HttpResponseBadRequest(json.dumps({'error': e.message}))
 
-        field = request.POST.get('field', None)
-        _id = request.POST.get('id', None)
-        value = request.POST.get('data', None)
+        data = QueryDict(request.body)
+        field = data.get('field', None)
+        _id = data.get('id', None)
+        value = data.get('data', None)
         obj = Model.objects.get(pk=_id)
         setattr(obj, field, value)
 
