@@ -75,6 +75,50 @@ function update_field(){
     return false;
 }
 
+function create_object(){
+    var data = {};
+
+    $.each($(this).parent().parent().find('input'), function(i, item){
+        data[$(item).data('field')] = $(item).val();
+    });
+
+    $.ajax({
+        type: "POST",
+        url: $('.list-group-item.active').attr('href')+'/',
+        data: data,
+        dataType: 'json',
+        async: false
+    }).done(function(data){
+        $.each($('.table tr:visible').last().find('td').slice(0, -1), function(i, item){
+            $(item).text($(item).find('input').val());
+        });
+        $('.table tr:visible').last().find('td').last().text(data.id)
+    }).fail(function(error){
+        alert("Что-то пошло не так");
+    });
+
+    $('#create-obj-form').off('click', create_object);
+    $('#create-obj-btn').show();
+    return false;
+}
+
+function add_line(){
+    var $table = $('.table:visible');
+    var html = '<tr>';
+
+    $.each($('.table thead th:visible').slice(0, -1), function(i, item){
+        html += '<td>';
+        html += '<input data-field="'+item.textContent+'" type="text"/>';
+        html += '</td>';
+    });
+
+    html += '<td><button id="create-obj-form" class="btn btn-default">Сохранить</button></td></tr>';
+    $('.table:visible').find('tbody').append(html);
+    $('#create-obj-btn').hide();
+    $('#create-obj-form').on('click', create_object);
+    return false;
+}
+
 function change_tab(){
     var $active = $('.list-group-item.active');
     $active.removeClass('active');
@@ -89,4 +133,5 @@ $(function() {
 
     $('.list-group-item').on('click', change_tab);
     $('.field-data').on('click', update_field);
+    $('#create-obj-btn').on('click', add_line);
 });

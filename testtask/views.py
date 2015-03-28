@@ -39,6 +39,19 @@ class ModelDataView(View):
         return HttpResponse(json.dumps(result, cls=DjangoJSONEncoder),
                             content_type='application/json')
 
+    def post(self, request, model_name):
+        try:
+            Model = get_model('testtask', model_name)
+        except LookupError as e:
+            logger.exception(e)
+            return HttpResponseBadRequest(json.dumps({'error': e.message}))
+
+        data = {name: value for name, value in request.POST.items()}
+        obj = Model.objects.create(**data)
+        data = {'id': obj.id}
+        return HttpResponse(json.dumps(data, cls=DjangoJSONEncoder),
+                            content_type='application/json')
+
     def put(self, request, model_name):
         try:
             Model = get_model('testtask', model_name)
